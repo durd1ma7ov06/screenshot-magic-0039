@@ -153,9 +153,9 @@
   --glass: oklch(0.97 0.02 20 / 0.08);
   --glass-border: oklch(0.9 0.06 40 / 0.28);
   --glow: 0 0 40px oklch(0.8 0.1 20 / 0.45);
-  --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-body: "Manrope", system-ui, sans-serif;
-  --font-script: "Great Vibes", cursive;
+  --font-display: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --font-body: "Plus Jakarta Sans", "Manrope", system-ui, sans-serif;
+  --font-script: "Great Vibes", "Alex Brush", cursive;
 }
 @theme inline {
   --color-ivory: var(--ivory);
@@ -165,9 +165,9 @@
   --font-script: var(--font-script);
 }
 html, body { background: var(--midnight); }
-.universe { font-family: var(--font-body); color: var(--ivory); background: var(--midnight); }
-.font-display { font-family: var(--font-display); font-weight: 400; }
-.font-script { font-family: var(--font-script); }
+.universe { font-family: var(--font-body); color: var(--ivory); background: var(--midnight); text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.font-display { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.01em; }
+.font-script { font-family: var(--font-script); font-weight: 400; }
 .text-glow { text-shadow: 0 0 24px oklch(0.75 0.12 15 / 0.6), 0 2px 12px oklch(0.1 0.04 320 / 0.9); }
 .vignette { background: radial-gradient(ellipse at center, transparent 45%, oklch(0.1 0.04 320 / 0.75) 100%); }
 .fallback-bg { background: radial-gradient(circle at 50% 40%, var(--burgundy), var(--midnight) 70%); }
@@ -203,10 +203,23 @@ html, body { background: var(--midnight); }
 .progress-dot.is-done { background: var(--blush); }
 .progress-dot.is-active { width: 28px; background: var(--rose-gold); box-shadow: 0 0 12px var(--rose-gold); }
 .letter-paper {
-  padding: 2.5rem 2.25rem; border-radius: 0.5rem; color: oklch(0.3 0.06 20);
-  background: linear-gradient(170deg, oklch(0.96 0.03 75), oklch(0.91 0.04 65));
-  box-shadow: 0 30px 80px oklch(0.05 0.02 320 / 0.7), 0 0 60px oklch(0.8 0.1 50 / 0.25);
+  padding: 2.75rem 2.25rem;
+  border-radius: 0.75rem;
+  color: oklch(0.24 0.08 20);
+  background: radial-gradient(circle at 15% 15%, oklch(0.98 0.02 75), oklch(0.93 0.04 65) 90%, oklch(0.88 0.05 55) 100%);
+  border: 1px solid oklch(0.8 0.08 55 / 0.4);
+  box-shadow: 0 35px 90px oklch(0.04 0.02 320 / 0.8), 0 0 50px oklch(0.8 0.1 50 / 0.3), inset 0 0 60px oklch(0.7 0.08 55 / 0.12);
+  position: relative;
 }
+.letter-paper::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid oklch(0.75 0.08 55 / 0.3);
+  border-radius: 0.5rem;
+  pointer-events: none;
+}
+
 .loader { background: radial-gradient(circle at center, oklch(0.25 0.08 340), var(--midnight) 70%); }
 .crystal {
   width: 64px; height: 64px; transform-style: preserve-3d;
@@ -217,3 +230,52 @@ html, body { background: var(--midnight); }
 }
 @keyframes crystal-spin { 0% { transform: rotateY(0) rotateX(15deg); } 100% { transform: rotateY(360deg) rotateX(15deg); } }
 @media (prefers-reduced-motion: reduce) { .crystal { animation-duration: 8s; } }
+
+.music-playing {
+  position: relative;
+  border-color: var(--rose-gold) !important;
+  box-shadow: 0 0 20px oklch(0.8 0.1 50 / 0.45);
+}
+.music-playing::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  border: 1px solid var(--rose-gold);
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  pointer-events: none;
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 0.85; }
+  50% { transform: scale(1.22); opacity: 0.15; }
+  100% { transform: scale(0.95); opacity: 0.85; }
+}
+
+/* Runaway button and playful error toast */
+.btn-runaway {
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.error-toast {
+  padding: 0.85rem 1.6rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, oklch(0.45 0.18 20 / 0.92), oklch(0.35 0.14 350 / 0.9));
+  border: 1px solid oklch(0.85 0.15 25 / 0.6);
+  backdrop-filter: blur(16px);
+  color: oklch(0.98 0.02 75);
+  box-shadow: 0 10px 30px oklch(0.4 0.2 20 / 0.6), 0 0 25px oklch(0.7 0.18 25 / 0.4);
+  font-family: var(--font-body);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.btn-proceed-glow {
+  box-shadow: 0 0 35px oklch(0.8 0.14 45 / 0.5), inset 0 1px 0 oklch(1 0 0 / 0.3);
+  animation: proceed-pulse 2.2s ease-in-out infinite;
+}
+@keyframes proceed-pulse {
+  0%, 100% { box-shadow: 0 0 30px oklch(0.8 0.14 45 / 0.45), inset 0 1px 0 oklch(1 0 0 / 0.3); transform: scale(1); }
+  50% { box-shadow: 0 0 50px oklch(0.85 0.16 55 / 0.75), inset 0 1px 0 oklch(1 0 0 / 0.4); transform: scale(1.03); }
+}

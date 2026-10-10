@@ -1,55 +1,90 @@
 // Edit all texts here. Photos: put image URLs into `photos` (or add them live in the gallery).
 export const story = {
-  intro: { title: "Sen uchun... yuragimdan bir hikoya ❤️", button: "Sehrli olamga kirish" },
+  name: "Parizoda",
+  intro: {
+    title: "Parizodam... sen uchun yuragimdan bir hikoya ✨",
+    subtitle: "Koinotdagi har bir yulduz va gulbarg faqat senga atalgan...",
+    button: "Sehrli olamga kirish ✨",
+  },
   garden: {
-    first: "Balki ko‘nglingni og‘ritgandirman...",
+    first: "Parizoda, balki bilmasdan ko‘nglingni og‘ritgandirman...",
     lines: [
-      "Agar seni xafa qilgan bo‘lsam, meni kechir.",
-      "Men uchun hislaring muhim.",
-      "Seni tinglashga va xatolarimni amalda tuzatishga tayyorman.",
+      "Mening hayotimdagi eng go‘zal mo‘jiza — bu sening borliging.",
+      "Agar seni xafa qilgan bo‘lsam, butun qalbim bilan kechirim so‘rayman.",
+      "Sening xotirjamliging va tabassuming men uchun butun dunyodan qadrli.",
+      "Seni har doim tinglashga, ardoqlashga va xatolarimni amalda tuzatishga tayyorman.",
     ],
   },
   gallery: {
-    caption: "Eng chiroyli lahzalar katta narsalarda emas, qalbimizda qolgan kichkina xotiralarda.",
-    photos: [] as string[],
-    captions: ["Birinchi tabassum", "Birga yurgan yo‘l", "Kechki osmon", "Kulgilar", "Jim lahzalar", "Bizning qo‘shiq", "Kelajak"],
+    caption: "Eng qadrli lahzalar — bu sen bilan o‘tgan har bir soniya, Parizodam.",
+    photos: [
+      "/pari/photo_2026-10-10_22-43-13.jpg",
+      "/pari/video_2026-10-10_22-42-40.mp4",
+      "/pari/photo_2026-10-10_22-43-19.jpg",
+      "/pari/video_2026-10-10_22-43-21.mp4",
+      "/pari/video_2026-10-10_22-43-25.mp4",
+      "/pari/video_2026-10-10_22-43-28.mp4",
+      "/pari/video_2026-10-10_22-43-30.mp4",
+    ],
+    captions: [
+      "Parizodam bilan ilk tabassum 🌸",
+      "Ko‘zlaringdagi bepoyon sehr ✨",
+      "Birga bosib o‘tgan yo‘llarimiz 🌹",
+      "Eng samimiy kulgularimiz 💫",
+      "Qalblarimiz gaplashgan onlar 🌙",
+      "Bizning sevimli taronamiz 🎶",
+      "Bizning porloq kelajagimiz 💖",
+    ],
   },
   heart: {
-    title: "Bu yurakda senga aytilmagan gaplar bor...",
-    button: "Yuragimdagi gaplarni och",
+    title: "Bu yurakda faqat sen borsan, Parizodam...",
+    button: "Yuragimdagi gaplarni och 💌",
     message:
-      "Men xatolarimni oqlamoqchi emasman. Seni tushunishni, tinglashni va ishonchingni amallarim bilan qozonishni istayman.",
+      "Parizoda, men xatolarimni oqlamoqchi emasman. Seni chin dildan tushunishni, har bir lahzada asrashni va ishonchingni amallarim bilan qozonishni istayman. Sening tabassuming — mening hayotim mazmuni.",
   },
   letter: {
-    hint: "Konvertni och",
+    hint: "Parizodaga atalgan maktubni oching ✉",
+    salutation: "Mening eng aziz va sevikli Parizodam...",
     paragraphs: [
-      "Men seni xafa qilishni istamagandim. Lekin niyatim qanday bo‘lganidan qat’i nazar, hislaringni ham tushunishim muhim.",
-      "Agar seni tinglamay qo‘ygan bo‘lsam yoki ko‘nglingni og‘ritgan bo‘lsam, chin yurakdan kechir.",
-      "Men hamma narsani bir zumda o‘zgartira olmasligimni bilaman. Lekin xatolarimni tan olishga va ularni tuzatishga tayyorman.",
-      "Senga bosim o‘tkazmoqchi emasman. Shunchaki sen men uchun qadrli ekaningni bilishingni istadim.",
-      "Agar tayyor bo‘lsang, bir-birimizni xotirjam tinglashdan boshlasak. ❤️",
+      "Bu maktubni qalbimning eng to‘ridagi samimiy va sof tuyg‘ularim bilan yozyapman. Hayotimga kirib kelganingdan beri butun olamim yorishdi, har bir soniyam o‘zgacha ma’no va baxtga to‘ldi.",
+      "Balki qachondir bilmasdan yoki tushunmay ko‘nglingga ozor yetkazgandirman, ko‘zlaringga ma’yuslik soya solgandirman... Agar shunday bo‘lgan bo‘lsa, meni chin yurakdan kechirgin, sevgilim. Sening ko‘zlaringdagi ma’yuslikni ko‘rish — men uchun eng katta azob.",
+      "Men sening har bir tabassumingni, samimiy kulgingni va beg‘ubor qalbingni butun dunyodan qizg‘onaman va cheksiz ardoqlayman. Sening baxting va xotirjamliging — mening eng oliy maqsadim.",
+      "Bilgin, qanday kunlar bo‘lmasin, men har doim yoningdaman. Seni tushunishga, qo‘llaringdan tutishga va cheksiz muhabbatim bilan ardoqlashga va’da beraman.",
+      "Sen mening hayotimdagi eng go‘zal va yagona mo‘jizasan. Seni bor vujudim bilan, jonimdan ortiq sevaman... ❤️",
     ],
-    signature: "Samimiyat bilan...",
+    signature: "Cheksiz muhabbat va sadoqat bilan, sening sevgiling ✨",
   },
   sky: {
     lines: [
-      "Ba'zi insonlar biz uchun oddiy inson bo‘lib qolmaydi...",
-      "Ularning tabassumi, xotirjamligi va qalbi biz uchun muhim bo‘lib qoladi.",
+      "Osmondagi millionlab yulduzlar ichida eng yorug‘i — sening ko‘zlaring, Parizoda...",
+      "Hatto cheksiz koinot ham sening go‘zalliging va samimiyating oldida lol qoladi.",
+      "Sen mening hayotimdagi eng yorqin, eng aziz yulduzimsan ✨",
     ],
   },
   final: {
-    question: "Menga bir imkon berasanmi? ❤️",
-    subtitle: "Shoshilmaymiz. Men seni tinglashga va hislaringni hurmat qilishga tayyorman.",
-    yes: "Gaplashib ko‘ramiz ❤️",
-    time: "Menga biroz vaqt kerak 🌷",
-    yesReply: "Rahmat, meni tinglashga tayyor bo‘lganing uchun. Keling, bir-birimizni xotirjam tinglaylik. ❤️",
-    timeReply: "Tushunaman. O‘zingga kerakli vaqtni ol. Hislaringni hurmat qilaman. 🌷",
+    question: "Parizodam, meni sevasanmi? ❤️",
+    subtitle: "Yuragingdagi eng samimiy javobni ayt...",
+    yes: "Ha, sizni sevaman ❤️",
+    no: "Yo‘q, sevmayman 🙈",
+    yesReply: "Men ham sizni dunyolardan ortiq sevaman, Parizodam! 💖💍 Har bir nafasimda siz borsiz, bir umr birga bo‘lamiz! ✨",
+    errors: [
+      "❌ Xatolik 404: Bu javob tizimda mavjud emas! 😜",
+      "⚠️ Tizim xatoligi: Yurak bunga ruxsat bermaydi! Faqat «Ha» deyish mumkin! 😂",
+      "🏃‍♂️ Tugma qochib ketdi! Sevmaslikning aslo iloji yo‘q! 🥰",
+      "🚫 Ruxsat berilmadi: Parizoda faqat sevishi mumkin! ❤️",
+      "💖 Xatolik: Urinib ko‘rmang, faqat «Ha, sizni sevaman» ishlaydi! 🙈",
+    ],
   },
 };
 
 export const SCENES = ["intro", "garden", "gallery", "heart", "letter", "sky", "final"] as const;
 export type SceneId = (typeof SCENES)[number];
 export const SCENE_LABELS: Record<SceneId, string> = {
-  intro: "Boshlanish", garden: "Atirgullar", gallery: "Xotiralar", heart: "Yurak",
-  letter: "Maktub", sky: "Osmon", final: "Savol",
+  intro: "Boshlanish",
+  garden: "Atirgullar",
+  gallery: "Xotiralar",
+  heart: "Yurak",
+  letter: "Maktub",
+  sky: "Osmon",
+  final: "Savol",
 };

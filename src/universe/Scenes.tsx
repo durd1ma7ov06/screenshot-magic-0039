@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { CameraRig, Float, GlassHeart, Petals, Rose, count, motion, palette, quality } from "./common";
 import { Dust, MorphParticles } from "./Particles";
-import { abstractArt, heartShape, heartXY } from "./shapes";
+import { abstractArt, heartShape, heartXY, letterPPoints, letterPShape } from "./shapes";
 
 function Bg({ color, fog }: { color: string; fog?: [number, number] }) {
   const { scene } = useThree();
@@ -24,14 +24,14 @@ export function IntroScene({ leaving }: { leaving: boolean }) {
   return (
     <>
       <Bg color="#120818" fog={[10, 40]} />
-      <CameraRig position={leaving ? [0, 0.6, 1.2] : [0, 1, 8]} lookAt={[0, 0.6, 0]} />
+      <CameraRig position={leaving ? [0, 0.9, 1.2] : [0, 1.3, 8.5]} lookAt={[0, 0.9, 0]} />
       <Stars radius={60} depth={40} count={count(3000)} factor={3} fade speed={0.4} />
-      <Sparkles count={count(160)} scale={[12, 6, 12]} size={2.5} speed={0.3 * motion} color={palette.gold} />
+      <Sparkles count={count(180)} scale={[12, 6, 12]} size={2.5} speed={0.3 * motion} color={palette.gold} />
       <Dust n={500} />
-      <Petals n={70} />
-      <group position={[0, 0.6, 0]}>
-        {!leaving && <GlassHeart scale={1.2} />}
-        <MorphParticles n={3500} scale={1.3} target={leaving ? 0 : 1} alpha={leaving ? 1 : 0.15} size={1.2} speed={leaving ? 2 : 0.5} scatterRadius={14} />
+      <Petals n={80} />
+      <group position={[0, 1.1, 0]}>
+        {!leaving && <GlassHeart scale={1.25} />}
+        <MorphParticles n={3500} scale={1.3} target={leaving ? 0 : 1} alpha={leaving ? 1 : 0.2} size={1.3} speed={leaving ? 2 : 0.5} scatterRadius={14} colorA="#ff9eb5" colorB="#ffd6b0" />
       </group>
       <OrbitingStars />
       <mesh rotation-x={-Math.PI / 2} position={[0, -1.2, 0]}>
@@ -42,7 +42,8 @@ export function IntroScene({ leaving }: { leaving: boolean }) {
           <MeshReflectorMaterial mirror={0.6} blur={[300, 80]} resolution={512} mixBlur={1} mixStrength={2} roughness={0.8} depthScale={1} color="#1a0a1c" metalness={0.5} />
         )}
       </mesh>
-      <ambientLight intensity={0.25} color="#ffc9d6" />
+      <ambientLight intensity={0.3} color="#ffc9d6" />
+      <pointLight position={[0, 2, -2]} intensity={25} color="#ffd4aa" />
       <spotLight position={[0, 8, 3]} angle={0.4} penumbra={1} intensity={60} color="#ffd6c9" />
     </>
   );
@@ -109,7 +110,21 @@ export function GardenScene() {
 }
 
 /* ---------- 3. Gallery ---------- */
-function Frame({ i, total, art, selected, onSelect }: { i: number; total: number; art: THREE.Texture; selected: number | null; onSelect: (i: number) => void }) {
+function Frame({
+  i,
+  total,
+  art,
+  selected,
+  onSelect,
+  isVideo = false,
+}: {
+  i: number;
+  total: number;
+  art: THREE.Texture;
+  selected: number | null;
+  onSelect: (i: number) => void;
+  isVideo?: boolean;
+}) {
   const ref = useRef<THREE.Group>(null);
   const [hover, setHover] = useState(false);
   useCursor(hover);
@@ -135,24 +150,80 @@ function Frame({ i, total, art, selected, onSelect }: { i: number; total: number
         <planeGeometry args={[1.6, 2.15]} />
         <meshBasicMaterial map={art} toneMapped={false} />
       </mesh>
+      {isVideo && (
+        <mesh position={[0, -0.85, 0.06]}>
+          <circleGeometry args={[0.13, 24]} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={hover ? 0.9 : 0.6} />
+        </mesh>
+      )}
     </group>
   );
 }
 
 export function GalleryScene({ photos, selected, onSelect }: { photos: (string | null)[]; selected: number | null; onSelect: (i: number | null) => void }) {
-  const textures = useMemo(() => photos.map((p, i) => {
-    if (!p) return abstractArt(i + 1);
-    const t = new THREE.TextureLoader().load(p);
-    t.colorSpace = THREE.SRGBColorSpace;
-    return t;
-  }), [photos]);
-  useEffect(() => () => textures.forEach((t) => t.dispose()), [textures]);
+  const [textures, setTextures] = useState<THREE.Texture[]>([]);
+
+  useEffect(() => {
+    const videoElements: HTMLVideoElement[] = [];
+
+    const list = photos.map((p, i) => {
+      if (!p) return abstractArt(i + 1);
+
+      const isVideo = p.endsWith(".mp4") || p.endsWith(".webm") || p.startsWith("data:video/");
+      if (isVideo) {
+        const vid = document.createElement("video");
+        vid.src = p;
+        vid.crossOrigin = "anonymous";
+        vid.loop = true;
+        vid.muted = true;
+        vid.playsInline = true;
+        vid.autoplay = true;
+        vid.preload = "auto";
+        vid.play().catch(() => {});
+        videoElements.push(vid);
+
+        const vTex = new THREE.VideoTexture(vid);
+        vTex.colorSpace = THREE.SRGBColorSpace;
+        vTex.minFilter = THREE.LinearFilter;
+        vTex.magFilter = THREE.LinearFilter;
+        return vTex;
+      } else {
+        const t = new THREE.TextureLoader().load(p);
+        t.colorSpace = THREE.SRGBColorSpace;
+        return t;
+      }
+    });
+
+    setTextures(list);
+
+    return () => {
+      videoElements.forEach((vid) => {
+        try {
+          vid.pause();
+          vid.src = "";
+          vid.load();
+        } catch {}
+      });
+      list.forEach((t) => t.dispose());
+    };
+  }, [photos]);
+
   return (
     <>
       <Bg color="#0e0714" fog={[6, 22]} />
       <CameraRig position={[0, 0.4, 8.5]} lookAt={[0, 0.2, 0]} strength={0.8} />
       <group onPointerMissed={() => onSelect(null)}>
-        {textures.map((t, i) => <Frame key={i} i={i} total={textures.length} art={t} selected={selected} onSelect={onSelect} />)}
+        {textures.map((t, i) => (
+          <Frame
+            key={i}
+            i={i}
+            total={textures.length}
+            art={t}
+            selected={selected}
+            onSelect={onSelect}
+            isVideo={Boolean(photos[i]?.endsWith(".mp4") || photos[i]?.endsWith(".webm") || photos[i]?.startsWith("data:video/"))}
+          />
+        ))}
       </group>
       <mesh rotation-x={-Math.PI / 2} position={[0, -1.8, 0]}>
         <circleGeometry args={[12, 64]} />
@@ -224,6 +295,7 @@ export function LetterScene({ stage, onOpen }: { stage: number; onOpen: () => vo
   const seal = useRef<THREE.MeshStandardMaterial>(null);
   const env = useRef<THREE.Group>(null);
   const [hover, setHover] = useState(false);
+  const sealP = useMemo(() => new THREE.ExtrudeGeometry(letterPShape(0.18), { depth: 0.025, bevelEnabled: false }), []);
   useCursor(hover && stage === 0);
   const paperTex = useMemo(() => {
     const c = document.createElement("canvas"); c.width = c.height = 256;
@@ -258,13 +330,19 @@ export function LetterScene({ stage, onOpen }: { stage: number; onOpen: () => vo
         </group>
         <group position={[0, -0.18, 0.13]} visible={stage < 2}>
           <mesh rotation-x={Math.PI / 2}>
-            <cylinderGeometry args={[0.22, 0.24, 0.05, 32]} />
-            <meshStandardMaterial ref={seal} color="#7a1022" emissive="#c2283f" roughness={0.35} metalness={0.2} />
+            <cylinderGeometry args={[0.26, 0.28, 0.05, 32]} />
+            <meshStandardMaterial ref={seal} color="#821024" emissive="#c2283f" roughness={0.35} metalness={0.25} />
           </mesh>
-          <mesh geometry={sealHeart} position={[0, 0.02, 0.02]}><meshStandardMaterial color="#b52a40" emissive="#ff6070" emissiveIntensity={0.6} /></mesh>
+          <mesh position={[0, 0, 0.02]} rotation-x={Math.PI / 2}>
+            <torusGeometry args={[0.25, 0.015, 16, 32]} />
+            <meshStandardMaterial color={palette.gold} metalness={0.7} roughness={0.25} />
+          </mesh>
+          <mesh geometry={sealP} position={[0.02, 0, 0.025]}>
+            <meshStandardMaterial color="#ffd8b0" emissive="#ffa870" emissiveIntensity={0.5} metalness={0.5} roughness={0.3} />
+          </mesh>
         </group>
       </group>
-      <Sparkles count={count(80)} scale={[8, 5, 6]} size={3} speed={0.2} color={palette.gold} />
+      <Sparkles count={count(100)} scale={[8, 5, 6]} size={3.5} speed={0.25} color={palette.gold} />
       <Dust n={250} />
       <ambientLight intensity={0.35} />
       <spotLight position={[0, 4, 5]} intensity={30} angle={0.6} penumbra={1} color="#ffe0c0" />
@@ -280,6 +358,7 @@ export function SkyScene() {
     const [x, y] = heartXY((i / 28) * Math.PI * 2);
     return new THREE.Vector3(x * 4, y * 4 + 2.5, -6);
   }), []);
+  const pStarPts = useMemo(() => letterPPoints(1.6, [0, 2.6, -6]), []);
   const [shown, setShown] = useState(1);
   useEffect(() => {
     const id = setInterval(() => setShown((s) => (s >= pts.length + 1 ? s : s + 1)), 160);
@@ -293,11 +372,15 @@ export function SkyScene() {
       <Bg color="#07061a" fog={[20, 60]} />
       <CameraRig position={[0, 1, z]} lookAt={[0, 2, -6]} strength={0.7} />
       <Stars radius={80} depth={50} count={count(6000)} factor={4} fade speed={0.6} />
-      {linePts.length > 1 && <Line points={linePts} color="#ffc6cf" lineWidth={1.5} transparent opacity={0.7} />}
+      {linePts.length > 1 && <Line points={linePts} color="#ffc6cf" lineWidth={1.6} transparent opacity={0.75} />}
+      {shown >= 14 && <Line points={pStarPts} color="#ffd59e" lineWidth={2} transparent opacity={0.85} />}
       {pts.slice(0, shown).map((p, i) => (
         <mesh key={i} position={p}><sphereGeometry args={[0.07, 10, 10]} /><meshBasicMaterial color="#fff0e0" /></mesh>
       ))}
-      <Sparkles count={count(60)} position={[0, 2.5, -6]} scale={[9, 8, 1]} size={8} color="#ffb6c4" speed={0.3} />
+      {pStarPts.map((p, i) => shown >= 14 && (
+        <mesh key={`p-star-${i}`} position={p}><sphereGeometry args={[0.09, 12, 12]} /><meshBasicMaterial color="#fff4d0" /></mesh>
+      ))}
+      <Sparkles count={count(70)} position={[0, 2.5, -6]} scale={[9, 8, 1]} size={8} color="#ffb6c4" speed={0.3} />
       <Trails />
       <mesh position={[0, -4, -30]}><planeGeometry args={[120, 14]} /><meshBasicMaterial color="#5a1f4a" transparent opacity={0.45} fog={false} /></mesh>
       <Dust n={400} radius={20} color="#cfd8ff" size={0.06} />
@@ -350,32 +433,32 @@ function BloomRose({ bloom, ...p }: { bloom: number } & ThreeElements["group"]) 
   return <group {...p}><group ref={ref} scale={0.6}><Rose stem={false} color="#a3243f" /></group></group>;
 }
 
-export function FinalScene({ choice }: { choice: "none" | "yes" | "time" }) {
+export function FinalScene({ choice }: { choice: "none" | "yes" }) {
   const roses = 10;
-  const calm = choice === "time";
   return (
     <>
-      <Bg color={calm ? "#080a1c" : "#1a0a1e"} fog={[8, 30]} />
-      <CameraRig position={calm ? [0, 3, 10] : [0, 1.6, 7.5]} lookAt={[0, 0.8, 0]} />
-      <Stars radius={60} count={count(3500)} factor={3} fade speed={calm ? 0.1 : 0.5} />
+      <Bg color={"#1a0a1e"} fog={[8, 30]} />
+      <CameraRig position={[0, 1.6, 7.5]} lookAt={[0, 0.8, 0]} />
+      <Stars radius={60} count={count(3500)} factor={3} fade speed={0.5} />
       <mesh position={[0, -0.6, 0]}>
         <cylinderGeometry args={[3, 3.2, 0.3, 64]} />
         <meshStandardMaterial color="#2a1222" metalness={0.6} roughness={0.25} />
       </mesh>
       <mesh position={[0, -0.44, 0]} rotation-x={-Math.PI / 2}><ringGeometry args={[2.85, 2.95, 96]} /><meshBasicMaterial color={palette.gold} /></mesh>
       <group position={[0, 1.2, 0]}>
-        <Float amp={0.15} speed={calm ? 0.4 : 1}><GlassHeart scale={0.8} glow={choice === "yes" ? 2.2 : calm ? 0.6 : 1} spin={calm ? 0.1 : 0.35} /></Float>
+        <Float amp={0.15} speed={1}><GlassHeart scale={0.85} glow={choice === "yes" ? 2.4 : 1.1} spin={0.35} /></Float>
         {choice === "yes" && <PulseRings />}
       </group>
       {Array.from({ length: roses }, (_, i) => {
         const a = (i / roses) * Math.PI * 2;
-        return <BloomRose key={i} bloom={choice === "yes" ? 1.1 : 0.6} position={[Math.cos(a) * 2.5, -0.25, Math.sin(a) * 2.5]} rotation={[-0.3, -a, 0]} />;
+        return <BloomRose key={i} bloom={choice === "yes" ? 1.2 : 0.6} position={[Math.cos(a) * 2.5, -0.25, Math.sin(a) * 2.5]} rotation={[-0.3, -a, 0]} />;
       })}
-      {Array.from({ length: quality.low ? 3 : 6 }, (_, i) => <Butterfly key={i} seed={i} />)}
+      {Array.from({ length: quality.low ? 3 : 7 }, (_, i) => <Butterfly key={i} seed={i} />)}
       {choice === "yes" && <Dust n={500} radius={6} color="#ffd58a" rise={1.2} size={0.07} />}
-      <Dust n={300} rise={calm ? 0.01 : 0.05} />
-      <ambientLight intensity={calm ? 0.2 : 0.35} />
-      <spotLight position={[0, 7, 3]} intensity={calm ? 15 : 40} angle={0.6} penumbra={1} color="#ffd6c9" />
+      {choice === "yes" && <Petals n={180} spread={16} fall={0.5} color="#ffa5ba" />}
+      <Dust n={300} rise={0.05} />
+      <ambientLight intensity={0.35} />
+      <spotLight position={[0, 7, 3]} intensity={40} angle={0.6} penumbra={1} color="#ffd6c9" />
     </>
   );
 }

@@ -1,26 +1,21 @@
-# Screenshot Magic
+# Parizodam... Sen Uchun ❤️ — Bizning Kichik Olamimiz
 
-Implement exactly the screenshot and nothing else
+Yurakdagi eng samimiy, beg‘ubor va nafis tuyg‘ular bilan yaratilgan interaktiv 3D sevgi olami.
 
-This project was built with [Lovable](https://lovable.dev).
+## 🌸 Xususiyatlar
 
-**Live app**: https://screenshot-magic-0039.lovable.app
+- **🌹 3D Atirgullar Bog‘i**: Romantik atirgullar va uchib yuruvchi nafis gulbarglar.
+- **🖼️ Xotiralar Galereyasi**: Parizodaning sevimli video va suratlari jamlangan interaktiv 3D galereya.
+- **💌 Yurak va Samimiy Maktub**: Qalb to‘ridan chiqqan chin dildagi so‘zlar va yozilgan samimiy xat.
+- **✨ Yulduzlar Osmoni**: Cheksiz koinotdagi eng porloq yulduz — Parizodaga atalgan satrlar.
+- **❤️ Interaktiv Taklif va Savol**: Sevgi izhori, qochib yuruvchi hazilomuz tugma va «Ha, sizni sevaman» tasdig‘i.
+- **🎵 Romantik Melodiya**: Fondagi sokin musiqa va sehrli chimes effektlari.
 
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/e126f665-3c29-4389-9b83-331e1d339b53).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## 🚀 Ishga tushirish (Local Development)
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+npm install
 npm run dev
 ```
+
+Brauzerda `http://localhost:8081/` manzilini oching.

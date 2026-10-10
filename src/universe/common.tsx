@@ -6,10 +6,10 @@ import { heartGeometry } from "./shapes";
 export const palette = {
   burgundy: "#5a0f24",
   plum: "#1a0b26",
-  blush: "#f4b6c2",
-  ivory: "#fff4e6",
-  rose: "#e8a598",
-  gold: "#f2c48d",
+  blush: "#ffb8cc",
+  ivory: "#fff6ee",
+  rose: "#f8a0b5",
+  gold: "#ffd7a3",
 };
 
 export const quality = {
@@ -72,30 +72,41 @@ export function Petals({ n = 120, spread = 14, color = palette.rose, fall = 0.3 
   );
 }
 
-/** Translucent crystal heart with inner glow */
+/** Translucent radiant crystal heart with inner glow and back illumination */
 export function GlassHeart({ scale = 1, glow = 1, spin = 0.3 }: { scale?: number; glow?: number; spin?: number }) {
   const ref = useRef<THREE.Group>(null);
   const geo = useMemo(() => heartGeometry(1, 0.45), []);
-  const inner = useMemo(() => heartGeometry(0.45, 0.2), []);
+  const inner = useMemo(() => heartGeometry(0.5, 0.22), []);
   useFrame((st, d) => {
     if (!ref.current) return;
     ref.current.rotation.y += Math.min(d, 0.05) * spin * motion;
-    const b = 1 + Math.sin(st.clock.elapsedTime * 1.6) * 0.025 * motion;
+    const b = 1 + Math.sin(st.clock.elapsedTime * 1.8) * 0.035 * motion;
     ref.current.scale.setScalar(scale * b);
   });
   return (
     <group ref={ref}>
       <mesh geometry={geo} rotation={[0, 0, 0]}>
         <meshPhysicalMaterial
-          color={palette.blush} transmission={0.92} thickness={1.2} roughness={0.08} ior={1.45}
-          clearcoat={1} clearcoatRoughness={0.05} attenuationColor="#ff7f9b" attenuationDistance={1.5}
-          emissive="#ff6f8e" emissiveIntensity={0.08 * glow} transparent opacity={0.95}
+          color="#ffc0d0"
+          transmission={0.88}
+          thickness={0.8}
+          roughness={0.04}
+          ior={1.5}
+          clearcoat={1}
+          clearcoatRoughness={0.03}
+          attenuationColor="#ff4d7a"
+          attenuationDistance={1.2}
+          emissive="#ff3b6c"
+          emissiveIntensity={0.35 * glow}
+          transparent
+          opacity={0.92}
         />
       </mesh>
       <mesh geometry={inner}>
-        <meshBasicMaterial color="#ffd6c8" transparent opacity={0.55 * glow} />
+        <meshBasicMaterial color="#fff0f5" transparent opacity={0.7 * glow} />
       </mesh>
-      <pointLight color="#ff9fae" intensity={6 * glow} distance={8} />
+      <pointLight color="#ff7b9f" intensity={18 * glow} distance={10} />
+      <pointLight position={[0, 0, -1]} color="#ffd19a" intensity={12 * glow} distance={6} />
     </group>
   );
 }

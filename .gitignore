@@ -20,6 +20,10 @@ dist-ssr
 .wrangler/
 .dev.vars
 
+# Root raw media folders (served from public/)
+/pari/
+/sound/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
