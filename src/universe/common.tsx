@@ -106,7 +106,7 @@ const petalGeo = (() => {
   g.translate(0, -0.05, 0);
   return g;
 })();
-export function Rose({ color = "#8c1630", bloom = 1, stem = true }: { color?: string; bloom?: number; stem?: boolean }) {
+export function Rose({ color = "#8c1630", bloom = 1, stem = true }: { color?: string | undefined; bloom?: number; stem?: boolean }) {
   const petals = useMemo(() => {
     const out: { rot: [number, number, number]; s: number; y: number }[] = [];
     for (let i = 0; i < 18; i++) {

@@ -59,11 +59,12 @@ export function MorphParticles({
 
   useFrame((st, d) => {
     const dt = Math.min(d, 0.05);
-    mat.uniforms.uTime.value = st.clock.elapsedTime * motion;
-    mat.uniforms.uMix.value += (target - mat.uniforms.uMix.value) * (1 - Math.exp(-speed * dt));
-    mat.uniforms.uAlpha.value += (alpha - mat.uniforms.uAlpha.value) * (1 - Math.exp(-2 * dt));
-    mat.uniforms.uPulse.value = pulse;
-    (mat.uniforms.uColorA.value as THREE.Color).lerp(new THREE.Color(colorA), dt);
+    const u = mat.uniforms as Record<string, { value: any }>; // eslint-disable-line @typescript-eslint/no-explicit-any
+    u.uTime!.value = st.clock.elapsedTime * motion;
+    u.uMix!.value += (target - u.uMix!.value) * (1 - Math.exp(-speed * dt));
+    u.uAlpha!.value += (alpha - u.uAlpha!.value) * (1 - Math.exp(-2 * dt));
+    u.uPulse!.value = pulse;
+    (u.uColorA!.value as THREE.Color).lerp(new THREE.Color(colorA), dt);
   });
   return <points ref={ref} geometry={geo} material={mat} frustumCulled={false} />;
 }
@@ -81,7 +82,7 @@ export function Dust({ n = 600, radius = 14, color = "#ffd9c7", size = 0.05, ris
     if (!ref.current) return;
     const dt = Math.min(d, 0.05) * motion;
     ref.current.rotation.y += dt * 0.02;
-    const pos = geo.attributes.position as THREE.BufferAttribute;
+    const pos = geo.getAttribute("position") as THREE.BufferAttribute;
     for (let i = 0; i < total; i++) {
       let y = pos.getY(i) + rise * dt * (1 + (i % 5) * 0.3);
       if (y > radius * 0.6) y = -radius * 0.6;

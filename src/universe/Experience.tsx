@@ -17,7 +17,7 @@ function hasWebGL() {
 export function Experience() {
   const [loading, setLoading] = useState(true);
   const [idx, setIdx] = useState(0);
-  const scene: SceneId = SCENES[idx];
+  const scene: SceneId = SCENES[idx] ?? "intro";
   const [leaving, setLeaving] = useState(false);
   const [webgl, setWebgl] = useState(true);
   const music = useAmbientMusic();
@@ -51,8 +51,8 @@ export function Experience() {
     const onKey = (e: KeyboardEvent) => { if (e.key === "ArrowRight" || e.key === "PageDown") nav(1); if (e.key === "ArrowLeft" || e.key === "PageUp") nav(-1); };
     const onWheel = (e: WheelEvent) => { if (Math.abs(e.deltaY) > 40 && !(e.target as HTMLElement).closest("[data-scroll]")) nav(e.deltaY > 0 ? 1 : -1); };
     let sy = 0;
-    const ts = (e: TouchEvent) => { sy = e.touches[0].clientY; };
-    const te = (e: TouchEvent) => { const dy = sy - e.changedTouches[0].clientY; if (Math.abs(dy) > 70 && !(e.target as HTMLElement).closest("[data-scroll]")) nav(dy > 0 ? 1 : -1); };
+    const ts = (e: TouchEvent) => { sy = e.touches[0]?.clientY ?? 0; };
+    const te = (e: TouchEvent) => { const dy = sy - (e.changedTouches[0]?.clientY ?? 0); if (Math.abs(dy) > 70 && !(e.target as HTMLElement).closest("[data-scroll]")) nav(dy > 0 ? 1 : -1); };
     window.addEventListener("keydown", onKey); window.addEventListener("wheel", onWheel); window.addEventListener("touchstart", ts); window.addEventListener("touchend", te);
     return () => { window.removeEventListener("keydown", onKey); window.removeEventListener("wheel", onWheel); window.removeEventListener("touchstart", ts); window.removeEventListener("touchend", te); };
   }, [idx, go]);
