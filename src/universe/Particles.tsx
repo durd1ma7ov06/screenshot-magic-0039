@@ -59,12 +59,12 @@ export function MorphParticles({
 
   useFrame((st, d) => {
     const dt = Math.min(d, 0.05);
-    const u = mat.uniforms as Record<string, { value: any }>; // eslint-disable-line @typescript-eslint/no-explicit-any
-    u.uTime!.value = st.clock.elapsedTime * motion;
-    u.uMix!.value += (target - u.uMix!.value) * (1 - Math.exp(-speed * dt));
-    u.uAlpha!.value += (alpha - u.uAlpha!.value) * (1 - Math.exp(-2 * dt));
-    u.uPulse!.value = pulse;
-    (u.uColorA!.value as THREE.Color).lerp(new THREE.Color(colorA), dt);
+    const u = mat.uniforms as unknown as { uTime: { value: number }; uMix: { value: number }; uAlpha: { value: number }; uPulse: { value: number }; uColorA: { value: THREE.Color } };
+    u.uTime.value = st.clock.elapsedTime * motion;
+    u.uMix.value += (target - u.uMix.value) * (1 - Math.exp(-speed * dt));
+    u.uAlpha.value += (alpha - u.uAlpha.value) * (1 - Math.exp(-2 * dt));
+    u.uPulse.value = pulse;
+    u.uColorA.value.lerp(new THREE.Color(colorA), dt);
   });
   return <points ref={ref} geometry={geo} material={mat} frustumCulled={false} />;
 }

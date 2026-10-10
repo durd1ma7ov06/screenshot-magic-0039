@@ -287,7 +287,7 @@ export function SkyScene() {
   }, [pts.length]);
   const [z, setZ] = useState(6);
   useEffect(() => { const t = setTimeout(() => setZ(13), 300); return () => clearTimeout(t); }, []);
-  const linePts = [...pts, pts[0]].slice(0, shown);
+  const linePts = [...pts, pts[0]!].slice(0, shown);
   return (
     <>
       <Bg color="#07061a" fog={[20, 60]} />
