@@ -1,5 +1,5 @@
 import { Line, MeshReflectorMaterial, RoundedBox, Sparkles, Stars, useCursor } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame, useThree, type ThreeElements } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { CameraRig, Float, GlassHeart, Petals, Rose, count, motion, palette, quality } from "./common";
@@ -344,7 +344,7 @@ function Butterfly({ seed }: { seed: number }) {
   );
 }
 
-function BloomRose({ bloom, ...p }: { bloom: number } & JSX.IntrinsicElements["group"]) {
+function BloomRose({ bloom, ...p }: { bloom: number } & ThreeElements["group"]) {
   const ref = useRef<THREE.Group>(null);
   useFrame((_, d) => { if (ref.current) { const s = ref.current.scale.x + (bloom - ref.current.scale.x) * Math.min(d, 0.05); ref.current.scale.setScalar(s); } });
   return <group {...p}><group ref={ref} scale={0.6}><Rose stem={false} color="#a3243f" /></group></group>;
