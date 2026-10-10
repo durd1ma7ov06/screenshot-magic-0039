@@ -19,7 +19,7 @@ export function useAmbientMusic() {
     });
     let c = 0;
     const step = () => {
-      chords[c % 4].forEach((f, i) => oscs[i].frequency.setTargetAtTime(f, ac.currentTime, 1.2));
+      chords[c % 4]!.forEach((f, i) => oscs[i]!.frequency.setTargetAtTime(f, ac.currentTime, 1.2));
       c++;
     };
     step();

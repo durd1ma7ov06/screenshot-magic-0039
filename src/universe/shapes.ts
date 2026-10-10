@@ -72,7 +72,7 @@ export function abstractArt(seed: number) {
   c.width = 384; c.height = 512;
   const ctx = c.getContext("2d")!;
   const hues = [345, 330, 20, 300, 10, 280, 35];
-  const h = hues[seed % hues.length];
+  const h = hues[seed % hues.length] ?? 340;
   const bg = ctx.createLinearGradient(0, 0, 384, 512);
   bg.addColorStop(0, `hsl(${h},45%,14%)`);
   bg.addColorStop(1, `hsl(${(h + 40) % 360},40%,8%)`);
