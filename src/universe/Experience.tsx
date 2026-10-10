@@ -180,7 +180,7 @@ export function Experience() {
           {scene === "sky" && <SkyText key="sky" />}
 
           {scene === "final" && (
-            <m.div key="final" {...fade} transition={{ duration: 1.2, ease }} className="flex h-full w-full flex-col items-center justify-between py-20">
+            <m.div key="final" {...fade} transition={{ duration: 1.2, ease }} className="flex h-full w-full flex-col items-center justify-between pt-16 pb-28">
               <div className="max-w-xl">
                 <h2 className="font-display text-4xl text-ivory text-glow md:text-5xl">{story.final.question}</h2>
                 <p className="mt-4 text-ivory/80 md:text-lg">{story.final.subtitle}</p>
